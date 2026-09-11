@@ -14,6 +14,7 @@ import com.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +101,14 @@ public class EmployeeController {
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO){
        PageResult pageResult= employeeService.queryPage(employeePageQueryDTO);
        return Result.success(pageResult);
+    }
+    /**
+     * 员工状态开关
+     */
+    @ApiOperation("员工状态设置")
+    @PostMapping("/status/{status}")
+    public Result<String> updateStatus(@PathVariable Integer status,Long id){
+        employeeService.updateStatus(status,id);
+        return Result.success();
     }
 }
