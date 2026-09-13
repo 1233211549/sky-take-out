@@ -16,6 +16,7 @@ import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
+import lombok.val;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,7 +116,32 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .id(id)
                 .status(status)
                 .build();
-        employeeMapper.updateStatus(build);
+        employeeMapper.update(build);
+    }
+
+    /**
+     *查询用户信息
+     * @param id
+     */
+    @Override
+    public Employee selectById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        employee.setPassword("******");
+        return employee;
+    }
+    /**
+     *修改员工信息
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        // 更新修改时间
+        employee.setUpdateTime(LocalDateTime.now());
+        // 更新修改人
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.update(employee);
     }
 
 }
